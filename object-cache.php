@@ -604,7 +604,12 @@ class WP_Object_Cache {
 		foreach ( $buckets as $bucket => $servers) {
 			$this->mc[$bucket] = new Memcache();
 			foreach ( $servers as $server  ) {
-				list ( $node, $port ) = explode(':', $server);
+				if ( strpos( $server, ':' ) ) {
+					list( $node, $port ) = explode( ':', $server );
+				} else {
+					$node = $server;
+					$port = null;
+				}
 				if ( ! $port ) {
 					$port = ini_get( 'memcache.default_port' );
 				}
